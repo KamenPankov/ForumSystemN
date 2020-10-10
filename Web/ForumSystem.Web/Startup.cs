@@ -1,27 +1,26 @@
-﻿namespace ForumSystem.Web
+﻿using System.Reflection;
+
+using ForumSystem.Data;
+using ForumSystem.Data.Common;
+using ForumSystem.Data.Common.Repositories;
+using ForumSystem.Data.Models;
+using ForumSystem.Data.Repositories;
+using ForumSystem.Data.Seeding;
+using ForumSystem.Services.Data;
+using ForumSystem.Services.Mapping;
+using ForumSystem.Services.Messaging;
+using ForumSystem.Web.ViewModels;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+namespace ForumSystem.Web
 {
-    using System.Reflection;
-
-    using ForumSystem.Data;
-    using ForumSystem.Data.Common;
-    using ForumSystem.Data.Common.Repositories;
-    using ForumSystem.Data.Models;
-    using ForumSystem.Data.Repositories;
-    using ForumSystem.Data.Seeding;
-    using ForumSystem.Services.Data;
-    using ForumSystem.Services.Mapping;
-    using ForumSystem.Services.Messaging;
-    using ForumSystem.Web.ViewModels;
-
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-
     public class Startup
     {
         private readonly IConfiguration configuration;
@@ -64,6 +63,7 @@
             // Application services
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender(this.configuration.GetValue<string>("SendGrid:ApiKey")));
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
