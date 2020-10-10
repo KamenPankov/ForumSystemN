@@ -32,6 +32,7 @@ namespace ForumSystem.Data.Seeding
                 {
                     Name = category.Name,
                     Title = category.Name,
+                    Description = category.Name,
                     ImageUrl = category.ImageUrl,
                 });
             }

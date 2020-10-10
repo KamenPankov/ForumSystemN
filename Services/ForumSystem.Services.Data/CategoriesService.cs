@@ -16,6 +16,15 @@ namespace ForumSystem.Services.Data
             this.categoriesRepository = repository;
         }
 
+        public T CategoryByName<T>(string name)
+        {
+            T category = this.categoriesRepository.All()
+                .Where(c => c.Name == name).To<T>()
+                .FirstOrDefault();
+
+            return category;
+        }
+
         public IEnumerable<T> GetAll<T>(int? count)
         {
             IQueryable<Category> query = this.categoriesRepository.All().OrderBy(x => x.Name);

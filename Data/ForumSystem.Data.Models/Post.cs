@@ -11,6 +11,8 @@ namespace ForumSystem.Data.Models
             this.Comments = new HashSet<Comment>();
         }
 
+        public string Title { get; set; }
+
         public string Content { get; set; }
 
         public string UserId { get; set; }
