@@ -17,5 +17,7 @@ namespace ForumSystem.Web.ViewModels.Posts
         [Range(1, int.MaxValue)]
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
+
+        public IEnumerable<DropdownCategoryViewModel> Categories { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using ForumSystem.Data.Models;
 using ForumSystem.Services.Data;
@@ -12,13 +13,16 @@ namespace ForumSystem.Web.Controllers.Posts
     public class PostsController : Controller
     {
         private readonly IPostsService postsService;
+        private readonly ICategoriesService categoriesService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public PostsController(
             IPostsService postsService,
+            ICategoriesService categoriesService,
             UserManager<ApplicationUser> userManager)
         {
             this.postsService = postsService;
+            this.categoriesService = categoriesService;
             this.userManager = userManager;
         }
 
@@ -31,7 +35,13 @@ namespace ForumSystem.Web.Controllers.Posts
 
         public IActionResult Create()
         {
-            return this.View();
+            IEnumerable<DropdownCategoryViewModel> categories = this.categoriesService.GetAll<DropdownCategoryViewModel>();
+            PostCreateViewModel viewModel = new PostCreateViewModel
+            {
+                Categories = categories,
+            };
+
+            return this.View(viewModel);
         }
 
         [HttpPost]

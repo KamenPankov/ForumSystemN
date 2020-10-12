@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations;
 using ForumSystem.Data.Common.Models;
 
 namespace ForumSystem.Data.Models
@@ -15,6 +15,7 @@ namespace ForumSystem.Data.Models
 
         public string Content { get; set; }
 
+        [Required]
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
