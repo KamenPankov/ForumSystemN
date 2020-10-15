@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
 using ForumSystem.Data.Common.Models;
 
 namespace ForumSystem.Data.Models
@@ -9,6 +10,7 @@ namespace ForumSystem.Data.Models
         public Post()
         {
             this.Comments = new HashSet<Comment>();
+            this.Votes = new HashSet<Vote>();
         }
 
         public string Title { get; set; }
@@ -25,5 +27,7 @@ namespace ForumSystem.Data.Models
         public virtual Category Category { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<Vote> Votes { get; set; }
     }
 }

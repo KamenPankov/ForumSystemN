@@ -18,8 +18,14 @@
                             <div class="text-muted small">@Model.CreatedOn</div>
                         </div>
                         <div class="text-muted small ml-3">
-                            <div><i class="fa fa-thumbs-up"></i></div>
-                            <div><i class="fa fa-thumbs-down"></i></div>
+                            <a href="#" onclick="vote(@Model.Id, true)">
+                                <div><i class="fa fa-thumbs-up"></i></div>
+                            </a>
+                            <div id="votesCount">@Model.VotesCount</div>
+                            <a href="#" onclick="vote(@Model.Id, false)">
+                                <div><i class="fa fa-thumbs-down"></i></div>
+                            </a>
+
                         </div>
                     </div>
                 </div>
@@ -42,3 +48,30 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+<script>
+    
+    async function vote(postId, isUpVote) {
+        var body = {
+            "postId": postId,
+            "isUpVote": isUpVote
+        };
+        var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        await fetch('https://localhost:44319/api/votes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': token
+            },
+            body: JSON.stringify(body)
+        })
+            .then(response => response.json())
+            .then(data => {
+                const divVotesCount = document.querySelector("#votesCount");
+                divVotesCount.textContent = data.votesCount;
+            })
+    }
+</script>
+}

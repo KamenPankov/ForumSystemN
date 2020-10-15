@@ -21,5 +21,7 @@ namespace ForumSystem.Web.ViewModels.Posts
         public string UserUserName { get; set; }
 
         public int CategoryId { get; set; }
+
+        public int VotesCount { get; set; }
     }
 }
