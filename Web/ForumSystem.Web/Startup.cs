@@ -104,8 +104,9 @@ namespace ForumSystem.Web
             app.UseEndpoints(
                 endpoints =>
                     {
-                        endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                        //endpoints.MapControllerRoute("forumCategoryWithPage", "f/{name:minlength(3)}/{page?}", new { controller = "Categories", action = "CategoryByName" });
                         endpoints.MapControllerRoute("forumCategory", "f/{name:minlength(3)}", new { controller = "Categories", action = "CategoryByName" });
+                        endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();
                     });

@@ -59,7 +59,7 @@
         };
         var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
 
-        await fetch('https://localhost:44319/api/votes', {
+        await fetch('/api/votes', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
