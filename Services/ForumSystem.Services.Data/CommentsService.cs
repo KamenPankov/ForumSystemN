@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
 using ForumSystem.Data.Common.Repositories;
 using ForumSystem.Data.Models;
@@ -28,6 +29,15 @@ namespace ForumSystem.Services.Data
             await this.commentsRepository.SaveChangesAsync();
 
             return comment.Id;
+        }
+
+        public bool IsMatchPostId(int commentId, int postId)
+        {
+            Comment comment = this.commentsRepository.All()
+                .Where(c => c.Id == commentId)
+                .FirstOrDefault();
+
+            return comment.PostId == postId;
         }
     }
 }

@@ -26,6 +26,16 @@ namespace ForumSystem.Web.Controllers.Comments
         [HttpPost]
         public async Task<IActionResult> Create(CommentInputModel inputModel)
         {
+            if (inputModel.ParentId.HasValue && inputModel.ParentId < 1)
+            {
+                inputModel.ParentId = null;
+            }
+
+            if (inputModel.ParentId.HasValue && !this.commentsService.IsMatchPostId(inputModel.ParentId.Value, inputModel.PostId))
+            {
+                return this.BadRequest();
+            }
+
             string userId = this.userManager.GetUserId(this.User);
             int commentId = await this.commentsService.Create(inputModel.PostId, userId, inputModel.Content, inputModel.ParentId);
 

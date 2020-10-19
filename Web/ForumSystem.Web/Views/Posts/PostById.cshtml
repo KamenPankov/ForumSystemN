@@ -2,6 +2,52 @@
 
 @{ this.ViewData["Title"] = Model.Title; }
 
+@functions  {
+    void DisplayComments(int? parentId)
+    {
+        var comments = Model.Comments.Where(c => c.ParentId == parentId);
+
+        if (!comments.Any())
+        {
+            return;
+        }
+
+        <div>
+            @foreach (var comment in comments)
+            {
+                <div class="container-fluid mt-100">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <div class="media flex-wrap w-100 align-items-center">
+                                        <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1574583246/AAA/2.jpg" class="d-block ui-w-40 rounded-circle" alt="">
+                                        <div class="media-body ml-3">
+                                            @comment.UserUserName
+                                            <div class="text-muted small">@Model.CreatedOn</div>
+                                        </div>
+                                        <div class="px-4 pt-3">
+                                            <button type="button" class="btn btn-primary" onclick="showCommentForm(@comment.Id)">
+                                                <i class="ion ion-md-create"></i>&nbsp; Answer
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p>
+                                        @Html.Raw(comment.SanitizedContent)
+                                    </p>
+                                    @{ DisplayComments(comment.Id); }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+
 <h1>@Model.Title</h1>
 
 
@@ -33,38 +79,7 @@
                     <p>
                         @Html.Raw(Model.SanitizedContent)
                     </p>
-                    <div>
-                        @foreach (var comment in Model.Comments)
-                        {
-                            <div class="container-fluid mt-100">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="card mb-4">
-                                            <div class="card-header">
-                                                <div class="media flex-wrap w-100 align-items-center">
-                                                    <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1574583246/AAA/2.jpg" class="d-block ui-w-40 rounded-circle" alt="">
-                                                    <div class="media-body ml-3">
-                                                        @comment.UserUserName
-                                                        <div class="text-muted small">@Model.CreatedOn</div>
-                                                    </div>
-                                                    <div class="px-4 pt-3">
-                                                        <button type="button" class="btn btn-primary" onclick="showCommentForm()">
-                                                            <i class="ion ion-md-create"></i>&nbsp; Answer
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <p>
-                                                    @Html.Raw(comment.SanitizedContent)
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
+                    @{ DisplayComments(null); }
                 </div>
 
                 <div class="card-footer d-flex flex-wrap justify-content-between align-items-center px-0 pt-0 pb-3">
@@ -74,7 +89,7 @@
                             <i class="fa fa-eye text-muted fsize-3"></i>&nbsp; <span class="align-middle">0</span>
                         </span>
                     </div>
-                    <div class="px-4 pt-3"> <button type="button" class="btn btn-primary" onclick="showCommentForm(@Model.Id)"><i class="ion ion-md-create"></i>&nbsp; Comment</button> </div>
+                    <div class="px-4 pt-3"> <button type="button" class="btn btn-primary" onclick="showCommentForm(0)"><i class="ion ion-md-create"></i>&nbsp; Comment</button> </div>
                 </div>
             </div>
         </div>
@@ -96,6 +111,7 @@
 <div style="display: none" id="addCommentForm">
     <form asp-controller="Comments" asp-action="Create" method="post">
         <input type="hidden" name="PostId" value="@Model.Id" />
+        <input type="hidden" name="ParentId" value="0" />
         <div>
             <label for="Content"></label>
             <textarea name="Content" id="Content" class="form-control"></textarea>
@@ -112,13 +128,17 @@
 @section scripts{
     <script>
 
-        function showCommentForm() {
+        function showCommentForm(parentId) {
             const divCommentForm = document.querySelector("#addCommentForm");
 
             if (divCommentForm.style.display === "none") {
                 divCommentForm.style.display = "block";
+                divCommentForm.scrollIntoView();
+
+                divCommentForm.querySelector("input[name='ParentId']").value = parentId;
             } else {
                 divCommentForm.style.display = "none";
+                divCommentForm.querySelector("input[name='ParentId']").value = 0;
             }
         }
 
